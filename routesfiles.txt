@@ -1,0 +1,24 @@
+/project-root/
+├── /pages/
+│   ├── index.jsx             # Home page
+│   ├── gear-planner.jsx      # Main feature
+│   ├── my-setups.jsx         # Saved setups
+│   ├── about.jsx             # Info/help page
+│   └── gear/
+│       └── [slot].jsx        # (Optional) Dynamic route for gear slots
+│
+├── /components/
+│   ├── GearForm.jsx
+│   ├── GearSlot.jsx
+│   ├── GearSummary.jsx
+│   └── Navbar.jsx
+│
+├── /context/
+│   └── GearContext.js
+├── /data/
+│   └── items.json
+├── /public/
+│   └── images, icons etc.
+├── /styles/
+│   └── globals.css or MUI theme
+└── next.config.js

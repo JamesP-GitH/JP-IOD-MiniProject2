@@ -1,0 +1,41 @@
+🔹 Proposed Routes
+Route	Purpose
+/	Home / intro / navigation to gear planner
+/gear-planner	Main interactive page to build your setup
+/gear/:slot	(Optional) Focused page for managing one gear slot
+/my-setups	View and load previously saved gear setups
+/about	Project description or how-to-use page (like a help guide)
+
+Why this works:
+Home shows routing/navigation (and optionally, auth later)
+
+Gear planner is your main feature (core form + interactivity)
+
+Saved setups gives you a chance to:
+
+Use useEffect to load from localStorage or a JSON mock
+
+Use useContext or props to restore the saved gear
+
+About is a quick way to add one more clean route (bonus points for UX)
+
+You can even add a route like /gear/:slot if you want to:
+
+Use useParams from React Router
+
+Show per-slot management (not required but neat if you're exploring)
+
+🧠 React Concepts This Structure Lets You Show Off
+Concept	How It’s Used
+useState	Gear selection, form inputs
+useEffect	Load gear options, saved setups
+useContext	Share gear planner state across components/pages
+Routing	Navigation between views, dynamic routing (/gear/:slot)
+Forms	Select gear, save/load setups
+External UI Lib	Use MUI AppBar, Drawer, Selects, Cards, etc.
+
+🧪 Optional (If You Have Time)
+Add a "Favorites" feature (like the recipe app), saving preferred gear setups
+
+Allow naming and saving setups (like "Melee Bossing Set", "Skilling Set")
+
