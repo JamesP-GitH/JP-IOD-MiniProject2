@@ -23,9 +23,6 @@
 │   ├── /context/                     # React Context Providers
 │   │   └── GearContext.js
 │
-│   ├── /data/                        # Static/mock data
-│   │   └── items.json
-│
 │   ├── /hooks/                       # Custom hooks (optional)
 │   │   └── useGear.js
 │
@@ -36,7 +33,7 @@
 │       └── theme.js                  # For MUI or custom themes
 │
 ├── /public/                          # Static assets
-│   └── images/, icons/, etc.
+│   └── images/, icons/ data/, etc.
 │
 ├── next.config.js
 └── README.md
