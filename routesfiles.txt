@@ -1,24 +1,42 @@
-/project-root/
-├── /pages/
-│   ├── index.jsx             # Home page
-│   ├── gear-planner.jsx      # Main feature
-│   ├── my-setups.jsx         # Saved setups
-│   ├── about.jsx             # Info/help page
-│   └── gear/
-│       └── [slot].jsx        # (Optional) Dynamic route for gear slots
+/mini-project-2/
+├── /src/
+│   ├── /app/                          # App router directory (entry point)
+│   │   ├── page.jsx                   # Home page (/)
+│   │   ├── gear-planner/
+│   │   │   └── page.jsx              # /gear-planner
+│   │   ├── my-setups/
+│   │   │   └── page.jsx              # /my-setups
+│   │   ├── about/
+│   │   │   └── page.jsx              # /about
+│   │   ├── gear/
+│   │   │   └── [slot]/
+│   │   │       └── page.jsx          # Dynamic route: /gear/[slot]
+│   │   ├── layout.jsx                # App layout (navbar etc.)
+│   │   └── globals.css               # Global styles
 │
-├── /components/
-│   ├── GearForm.jsx
-│   ├── GearSlot.jsx
-│   ├── GearSummary.jsx
-│   └── Navbar.jsx
+│   ├── /components/                  # Reusable UI components
+│   │   ├── GearForm.jsx
+│   │   ├── GearSlot.jsx
+│   │   ├── GearSummary.jsx
+│   │   └── Navbar.jsx
 │
-├── /context/
-│   └── GearContext.js
-├── /data/
-│   └── items.json
-├── /public/
-│   └── images, icons etc.
-├── /styles/
-│   └── globals.css or MUI theme
-└── next.config.js
+│   ├── /context/                     # React Context Providers
+│   │   └── GearContext.js
+│
+│   ├── /data/                        # Static/mock data
+│   │   └── items.json
+│
+│   ├── /hooks/                       # Custom hooks (optional)
+│   │   └── useGear.js
+│
+│   ├── /lib/                         # Helper utilities
+│   │   └── gearUtils.js
+│
+│   └── /styles/                      # Additional styles or themes
+│       └── theme.js                  # For MUI or custom themes
+│
+├── /public/                          # Static assets
+│   └── images/, icons/, etc.
+│
+├── next.config.js
+└── README.md
