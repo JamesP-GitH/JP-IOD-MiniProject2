@@ -31,11 +31,11 @@ const prayerBonuses = {
 
 function PrayerBonuses(activePrayers) {
     const result = {
-        attack: 1,
-        strength: 1,
-        defence: 1,
+        attack: 0,
+        strength: 0,
+        defence: 0,
         ranged: 1,
-        magic: 1,
+        magic: 0,
     };
 
     activePrayers.forEach((prayer) => {

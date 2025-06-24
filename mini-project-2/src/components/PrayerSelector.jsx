@@ -104,7 +104,7 @@ function PrayerSelector({ onPrayersChange }) {
     }
 
     return (
-        <Container className="text-center justify-content-center" style={{ maxWidth: "250px", marginTop: "20px" }}>
+        <Container className="text-center justify-content-center" style={{ maxWidth: "250px", marginTop: "12px" }}>
             {rows.map((row, rowIndex) => (
                 <Row key={rowIndex} className="mb-0 justify-content-between">
                     {row.map((prayer) => (

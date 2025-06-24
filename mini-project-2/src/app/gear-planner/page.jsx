@@ -16,11 +16,13 @@ function GearPlanner() {
     const [personalStats, setPersonalStats] = useState({});
     const [activePrayers, setActivePrayers] = useState([]);
     const [activeStyle, setActiveStyle] = useState();
+    const [selectedSpellName, setSelectedSpellName] = useState(null);
 
     const items = useMemo(() => {
         return data ? Object.entries(data).map(([id, item]) => ({ id, ...item })) : [];
     }, [data]);
     const isTwoHanded = gear.weapon?.equipment?.slot === "2h";
+
     function handleItemSelect(item) {
         if (!activeSlot) return;
 
@@ -31,6 +33,11 @@ function GearPlanner() {
         if (activeSlot === "weapon" && item?.equipment?.slot === "2h") {
             setGear("shield", null);
         }
+    }
+
+    function handleStyleChange(style, spell) {
+        setActiveStyle(style);
+        setSelectedSpellName(spell || null);
     }
 
     function clearSlot(slot) {
@@ -44,7 +51,9 @@ function GearPlanner() {
                     <PersonalStatsPanel
                         onStatsChange={setPersonalStats}
                         onPrayersChange={setActivePrayers}
-                        onStyleChange={setActiveStyle}
+                        onStyleChange={handleStyleChange}
+                        activeStyle={activeStyle}
+                        selectedSpellName={selectedSpellName}
                     />
                 </Col>
                 <Col md={4} sx={12}>
@@ -120,7 +129,12 @@ function GearPlanner() {
             </Row>
             <hr />
             <Row className="mt-3">
-                <GearStatsSummary personalStats={personalStats} activePrayers={activePrayers} activeStyle={activeStyle} />
+                <GearStatsSummary
+                    personalStats={personalStats}
+                    activePrayers={activePrayers}
+                    activeStyle={activeStyle}
+                    selectedSpellName={selectedSpellName}
+                />
             </Row>
             {/*Bottom Row showing realtime updated stats*/}
         </Container>

@@ -1,5 +1,6 @@
 import React from "react";
 import PrayerBonuses from "./PrayerBonuses";
+import { getSpellDamage } from "@/utils/SpellbookUtils";
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -13,78 +14,103 @@ function MaxHitCalculator({
     equipmentRangedBonus = 0,
     rangedStrengthBonus = 0,
     magicDamageBonus = 0,
-    weaponType = "melee",
+    weaponType,
     activePrayers = [],
+    activeStyle,
+    selectedSpellName,
 }) {
+    const meleeStyleBonuses = {
+        aggressive: 3,
+        controlled: 1,
+        accurate: 0,
+        defensive: 0,
+    };
+
+    const rangedStyleBonuses = {
+        accurate: 3,
+    };
+
     const bonuses = PrayerBonuses(activePrayers);
-    const styleBonus = 3; //placeholder
+    const meleeStyleBonus = meleeStyleBonuses[activeStyle?.attack_style] || 0;
+    const rangedStyleBonus = rangedStyleBonuses[activeStyle?.combat_style] || 0;
     const voidBonus = 1; //placeholder
+
     const specialBonus = 1; //placeholder
     const potionBonus = 0; //placeholder
     const gearBonus = 1; //placeholder
-    const chaosGauntletBoost = 0 || 3; //placeholder
+    const chaosGauntletBoost = 0; //placeholder
 
-    const baseMaxMagicDamage = 1;
-    const visibleBonuses = 1; //placeholder
-    const shadowBonus = 1; //placeholder
-    const salveBonus = 1; //placeholder
-    const avariceBonus = 1; //placeholder
-    const smokeBattlestaffBonus = 1; //placeholder
-    const virtusRobesAncientBonus = 1; //placeholder
-    const slayerBonus = 1; //placeholder
-    const sceptreWildernessBonus = 1; //placeholder
-    const accursedScepterSpecialBonus = 1; //placeholder
-    const tomesBonus = 1; //placeholder
-    const markOfDarknessBonus = 1; //placeholder
-    const ahrimsDamnedBonus = 1; //placeholder
-    const castleWarsBracletBonus = 1; //placeholder
-    const charge = 0 || 10; //placeholder
-
+    const baseMaxMagicDamage = getSpellDamage(selectedSpellName);
+    const visibleBonuses = 0; //placeholder
+    const voidMagicBonus = 0;
+    const shadowBonus = 0; //placeholder
+    const salveBonus = 0; //placeholder
+    const avariceBonus = 0; //placeholder
+    const smokeBattlestaffBonus = 0; //placeholder
+    const virtusRobesAncientBonus = 0; //placeholder
+    const slayerBonus = 0; //placeholder
+    const sceptreWildernessBonus = 0; //placeholder
+    const accursedScepterSpecialBonus = 0; //placeholder
+    const tomesBonus = 0; //placeholder
+    const markOfDarknessBonus = 0; //placeholder
+    const ahrimsDamnedBonus = 0; //placeholder
+    const castleWarsBracletBonus = 0; //placeholder
+    const charge = 0; //placeholder
+    let weaponAttackType;
     let effectiveLevel, baseDamage, maxHit, prayerBonus;
-
-    switch (weaponType) {
+    if (activeStyle?.attack_style === "magic") {
+        weaponAttackType = "magic";
+    } else {
+        weaponAttackType = weaponType;
+    }
+    switch (weaponAttackType) {
         case "melee":
             prayerBonus = bonuses.strength || 1;
-            effectiveLevel = Math.floor((Math.floor((strengthLevel + potionBonus) * prayerBonus) + styleBonus + 8) * voidBonus);
+            effectiveLevel = Math.floor((Math.floor((strengthLevel + potionBonus) * prayerBonus) + meleeStyleBonus + 8) * voidBonus);
             baseDamage = Math.floor(0.5 + effectiveLevel * ((strengthBonus + 64) / 640));
             maxHit = Math.floor(baseDamage * specialBonus);
             break;
         case "ranged":
             prayerBonus = bonuses.ranged || 1;
-            effectiveLevel = Math.floor((Math.floor((rangedLevel + potionBonus) * prayerBonus) + styleBonus + 8) * voidBonus);
+            effectiveLevel = Math.floor((Math.floor((rangedLevel + potionBonus) * prayerBonus) + rangedStyleBonus + 8) * voidBonus);
             baseDamage = Math.floor(Math.floor(0.5 + (effectiveLevel * (rangedStrengthBonus + 64)) / 640) * gearBonus);
             maxHit = Math.floor(baseDamage * specialBonus);
             break;
         case "magic":
-            prayerBonus = bonuses.magic || 1;
-            const baseDamageModifier = Math.floor(Math.abs(baseMaxMagicDamage + chaosGauntletBoost + charge));
-            const primaryMagicDamage = Math.floor(
-                Math.abs(
-                    baseDamageModifier *
-                        (1 +
-                            Math.min(1, (visibleBonuses - voidBonus) * shadowBonus) +
-                            voidBonus +
-                            salveBonus +
-                            avariceBonus +
-                            smokeBattlestaffBonus +
-                            virtusRobesAncientBonus +
-                            prayerBonus)
-                )
-            );
-            const preHitRoll = Math.floor(
-                Math.abs(
+            if (selectedSpellName) {
+                prayerBonus = bonuses.magic || 0;
+                const baseDamageModifier = Math.floor(Math.abs(baseMaxMagicDamage + chaosGauntletBoost + charge));
+                const primaryMagicDamage = Math.floor(
                     Math.abs(
-                        Math.abs(Math.abs(primaryMagicDamage * (1 + slayerBonus)) * (1 + sceptreWildernessBonus)) *
-                            (1 + accursedScepterSpecialBonus)
-                    ) *
-                        (1 + tomesBonus)
-                )
-            );
-            const hitRoll = Math.floor(Math.abs(Math.max(1, getRandomInt(0, preHitRoll))));
-            const postHitRoll = Math.floor(
-                Math.abs(Math.abs(Math.abs(hitRoll * (1 + markOfDarknessBonus)) * (1 + ahrimsDamnedBonus)) * (1 + castleWarsBracletBonus))
-            );
-            maxHit = postHitRoll;
+                        baseDamageModifier *
+                            (1 +
+                                Math.min(1, (visibleBonuses - voidMagicBonus) * shadowBonus) +
+                                voidMagicBonus +
+                                salveBonus +
+                                avariceBonus +
+                                smokeBattlestaffBonus +
+                                virtusRobesAncientBonus +
+                                prayerBonus)
+                    )
+                );
+                const preHitRoll = Math.floor(
+                    Math.abs(
+                        Math.abs(
+                            Math.abs(Math.abs(primaryMagicDamage * (1 + slayerBonus)) * (1 + sceptreWildernessBonus)) *
+                                (1 + accursedScepterSpecialBonus)
+                        ) *
+                            (1 + tomesBonus)
+                    )
+                );
+                const postHitRoll = Math.floor(
+                    Math.abs(
+                        Math.abs(Math.abs(preHitRoll * (1 + markOfDarknessBonus)) * (1 + ahrimsDamnedBonus)) * (1 + castleWarsBracletBonus)
+                    )
+                );
+                maxHit = postHitRoll;
+            } else {
+                maxHit = "Please choose spell";
+            }
     }
 
     return <div>Max Hit: {maxHit}</div>;

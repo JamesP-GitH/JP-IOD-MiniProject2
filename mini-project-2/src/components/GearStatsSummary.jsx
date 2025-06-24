@@ -4,9 +4,9 @@ import { GearContext } from "@/context/GearContext";
 import MaxHitCalculator from "./MaxHitCalculator";
 import WeaponTypes from "../utils/WeaponTypesUtils";
 
-function GearStatsSummary({ personalStats, activePrayers }) {
+function GearStatsSummary({ personalStats, activePrayers, activeStyle, selectedSpellName }) {
     const { gear } = useContext(GearContext);
-    const weaponType = WeaponTypes(gear.weapon?.weapon?.type || "unarmed");
+    const weaponType = WeaponTypes(gear.weapon?.weapon.weapon_type || "unarmed");
 
     const initialStats = {
         attack_stab: 0,
@@ -87,6 +87,8 @@ function GearStatsSummary({ personalStats, activePrayers }) {
                         magicDamageBonus={totalStats.magic_damage}
                         weaponType={weaponType}
                         activePrayers={activePrayers || []}
+                        activeStyle={activeStyle}
+                        selectedSpellName={selectedSpellName || ""}
                     />
                 </Col>
             </Row>
