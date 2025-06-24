@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Row, Col } from "react-bootstrap";
 import { GearContext } from "@/context/GearContext";
+import MaxHitCalculator from "./MaxHitCalculator";
+import WeaponTypes from "../utils/WeaponTypesUtils";
 
-function GearStatsSummary() {
+function GearStatsSummary({ personalStats, activePrayers }) {
     const { gear } = useContext(GearContext);
+    const weaponType = WeaponTypes(gear.weapon?.weapon?.type || "unarmed");
 
     const initialStats = {
         attack_stab: 0,
@@ -23,18 +26,23 @@ function GearStatsSummary() {
         attack_speed: 0,
     };
 
-    const totalStats = Object.values(gear).reduce(
-        (accumulatedValue, item) => {
-            const eq = item?.equipment;
-            if (eq) {
-                for (const key in initialStats) {
-                    accumulatedValue[key] += eq[key] || 0;
+    const totalStats = useMemo(() => {
+        return Object.values(gear).reduce(
+            (accumulatedValue, item) => {
+                const eq = item?.equipment;
+                if (eq) {
+                    for (const key in initialStats) {
+                        accumulatedValue[key] += eq[key] || 0;
+                    }
                 }
-            }
-            return accumulatedValue;
-        },
-        { ...initialStats }
-    );
+                if (eq?.slot === "weapon" && item.weapon?.attack_speed !== undefined) {
+                    accumulatedValue.attack_speed = item.weapon.attack_speed;
+                }
+                return accumulatedValue;
+            },
+            { ...initialStats }
+        );
+    }, [gear]);
 
     function formatBonus(value) {
         return value !== undefined && value !== null ? (value >= 0 ? `+${value}` : `${value}`) : "—";
@@ -66,7 +74,20 @@ function GearStatsSummary() {
                     <div>Ranged Strength: {formatBonus(totalStats.ranged_strength)}</div>
                     <div>Magic Damage: {formatBonus(totalStats.magic_damage)}%</div>
                     <div>Prayer: {formatBonus(totalStats.prayer)}</div>
-                    <div>Weight: {totalStats.weight?.toFixed(1)} kg</div>
+                    <div>Attack Speed: {totalStats.attack_speed}</div>
+                </Col>
+                <Col>
+                    <strong>DPS</strong>
+                    <MaxHitCalculator
+                        strengthLevel={(personalStats && personalStats.strengthLevel) || 99}
+                        rangedLevel={personalStats.rangedLevel}
+                        magicLevel={personalStats.magicLevel}
+                        strengthBonus={totalStats.melee_strength || 0}
+                        rangedStrengthBonus={totalStats.ranged_strength}
+                        magicDamageBonus={totalStats.magic_damage}
+                        weaponType={weaponType}
+                        activePrayers={activePrayers || []}
+                    />
                 </Col>
             </Row>
         </div>

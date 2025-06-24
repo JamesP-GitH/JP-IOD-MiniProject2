@@ -32,24 +32,42 @@ function useGearItems(slot) {
 
         dispatch({ type: "FETCH_START" });
 
-        fetch(slotDataLocation)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Failed to load ${slot}`);
+        async function fetchData() {
+            try {
+                let data = {};
+
+                if (slot === "weapon") {
+                    const [oneHanded, twoHanded] = await Promise.all([
+                        fetch("/data/items-weapon.json").then((res) => {
+                            if (!res.ok) throw new Error("Failed to load one-handed weapons");
+                            return res.json();
+                        }),
+                        fetch("/data/items-2h.json").then((res) => {
+                            if (!res.ok) throw new Error("Failed to load two-handed weapons");
+                            return res.json();
+                        }),
+                    ]);
+
+                    data = { ...oneHanded, ...twoHanded };
+                } else {
+                    const res = await fetch(`/data/items-${slot}.json`);
+                    if (!res.ok) throw new Error(`Failed to load ${slot}`);
+                    data = await res.json();
                 }
-                return response.json();
-            })
-            .then((json) => {
+
                 if (!ignore) {
-                    dispatch({ type: "FETCH_SUCCESS", payload: json });
-                    console.log(`success: ${slot}`);
+                    dispatch({ type: "FETCH_SUCCESS", payload: data });
+                    console.log(`Success loading: ${slot}`);
                 }
-            })
-            .catch((error) => {
+            } catch (error) {
                 if (!ignore) {
                     dispatch({ type: "FETCH_ERROR", payload: error.message });
                 }
-            });
+            }
+        }
+
+        fetchData();
+
         return () => {
             ignore = true;
         };

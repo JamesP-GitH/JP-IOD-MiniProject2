@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 function AppNavbar() {
     const pathname = usePathname();
     return (
-        <BootstrapNavbar bg="light" expand="lg" className="mb-4">
+        <BootstrapNavbar bg="light" expand="lg" className="mb-1">
             <Container>
                 <Link href="/" className="navbar-brand">
                     Gear Planner

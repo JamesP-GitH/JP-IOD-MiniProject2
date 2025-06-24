@@ -7,16 +7,16 @@ function ItemList({ items, slot, loading, error, onItemClick }) {
     const [searchQuery, setSearchQuery] = useState("");
 
     if (!slot) {
-        return <p>Select a gear slot to see items.</p>;
+        return <h6 className="text-center">Select a gear slot to see items.</h6>;
     }
     if (loading) {
-        return <p>Loading items...</p>;
+        return <h6 className="text-center">Loading items...</h6>;
     }
     if (error) {
-        return <p>Error: {error}</p>;
+        return <h6 className="text-center">Error: {error}</h6>;
     }
     if (items.length === 0) {
-        return <p>No items found for this slot.</p>;
+        return <h6 className="text-center">No items found for this slot.</h6>;
     }
 
     function sortItems(items, sortOption) {
@@ -47,7 +47,7 @@ function ItemList({ items, slot, loading, error, onItemClick }) {
 
     return (
         <>
-            <h6 style={{ textAlign: "center" }}>{slot.charAt(0).toUpperCase() + slot.slice(1)} items</h6>{" "}
+            <h6 className="text-center">{slot.charAt(0).toUpperCase() + slot.slice(1)} items</h6>{" "}
             <div className="d-flex justify-content-around">
                 <Form.Group controlId="sortSelect" className="mb-2 text-center">
                     <Form.Select
